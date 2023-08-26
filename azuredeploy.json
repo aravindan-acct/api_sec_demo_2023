@@ -17,7 +17,7 @@
     },
     "functions": [],
     "variables": {
-        "vmname": "petstore",
+        "vmname": "cudapetapi",
         "storageacctname": "[toLower(concat(variables('vmname'),'storage'))]",
         "publicip": "[concat(variables('vmname'),'-PublicIP')]",
         "vmnsg": "[concat(variables('vmname'), '-nsg')]",
