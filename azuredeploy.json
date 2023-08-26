@@ -12,11 +12,7 @@
         },
         "_artifactsLocation": {
             "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/aravindan-acct/api_sec_demo_2023/main/azuredeploy.json"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "defaultValue": ""
+            "defaultValue": "https://raw.githubusercontent.com/aravindan-acct/api_sec_demo_2023/main/scripts/provisioning.sh"
         }
     },
     "functions": [],
@@ -228,11 +224,16 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "sh customScript.sh"
+                    "commandToExecute": "sh provisioning.sh"
                 }
             }
         }
                 
     ],
-    "outputs": {}
+    "outputs": {
+        "VMPublicIP": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('publicip')))]"
+        }
+    }
 }
