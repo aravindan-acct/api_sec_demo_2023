@@ -25,7 +25,7 @@
         "subnet": "[concat(variables('vmname'), '-VirtualNetwork-Subnet')]",
         "nic": "[concat(variables('vmname'),'-NetworkInterface')]",
         "osdisk": "[concat(variables('vmname'),'-OSDisk')]",
-        "customscript": "provisioning/customscript"
+        "customscript": "[concat(variables('vmname'),'/customscript')]"
     },
     "resources": [
         {
