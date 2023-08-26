@@ -1,13 +1,24 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {"vmpass": {
-        "type": "securestring",
-        "metadata": {
+    "parameters": {
+        
+        "vmpass": {
+            "type": "securestring",
+            "metadata": {
             "description": "description"
+            },
+            "defaultValue": "P@$$w0rd@!23"
         },
-        "defaultValue": "P@$$w0rd@!23"
-    }},
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/aravindan-acct/api_sec_demo_2023/main/azuredeploy.json"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": ""
+        }
+    },
     "functions": [],
     "variables": {
         "vmname": "petstore",
@@ -213,7 +224,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "[concat('artifactsLocation', '/scripts/customScript.sh', 'artifactsLocationSasToken')]"
+                        "[parameters('_artifactsLocation')]"
                     ]
                 },
                 "protectedSettings": {
