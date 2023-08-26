@@ -8,7 +8,7 @@
             "metadata": {
             "description": "description"
             },
-            "defaultValue": "P@$$w0rd@!23"
+            "defaultValue": "P@$$w0rd@123"
         },
         "_artifactsLocation": {
             "type": "string",
