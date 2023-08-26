@@ -233,7 +233,7 @@
     "outputs": {
         "VMPublicIP": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('publicip')))]"
+            "value": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicip'))]"
         }
     }
 }
