@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ### This script sets up the ubuntu server for the apifrontend
-### It uses nginx for ssl offloading of the keycloak traffic 
+### It uses nginx for ssl offloading of the apifrontend traffic 
 ### 
 ###
 ### 1. Initial setup - package installations
@@ -38,7 +38,7 @@ cat > ca-config.json <<EOF
       "expiry": "8760h"
     },
     "profiles": {
-      "keycloak": {
+      "apifrontend": {
         "usages": ["signing", "key encipherment", "server auth", "client auth"],
         "expiry": "8760h"
       }
@@ -58,7 +58,7 @@ cat > ca-csr.json <<EOF
     {
       "C": "US",
       "L": "SF",
-      "O": "Keycloak",
+      "O": "APIFrontend",
       "OU": "CA",
       "ST": "CA"
     }
@@ -98,8 +98,8 @@ cfssl gencert \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -hostname=apifrontend.cudanet.local \
-  -profile=keycloak \
-  apifrontend-csr.json | cfssljson -bare keycloak
+  -profile=apifrontend \
+  apifrontend-csr.json | cfssljson -bare apifrontend
 
 }
 echo "moving the certificates"
@@ -134,7 +134,7 @@ server {
       proxy_pass          http://localhost:7979;
       proxy_read_timeout  90;
 
-      proxy_redirect      http://localhost:7979 https://keycloak.cudanet.local;
+      proxy_redirect      http://localhost:7979 https://apifrontend.cudanet.local;
       
     }
   }
@@ -142,6 +142,7 @@ EOF
 }
 sudo cp nginxconfig.conf nginxconfig.conf.bak
 sudo mv nginxconfig.conf /etc/nginx/sites-enabled/default
-sudo systemctl enable nginx
-sudo systemctl stop nginx
-sudo systemctl start nginx
+git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
+cd frontend_UI_app
+nohup python3 starturl.py &
+echo "Script run completed"
