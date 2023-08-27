@@ -17,6 +17,8 @@ sudo apt-get install apt-transport-https ca-certificates curl software-propertie
 sudo apt-get update
 sudo apt-get install -y python3-pip
 sudo pip3 install flask
+#Fix cfssl cfssljson related issue with the following fix:
+#https://github.com/kelseyhightower/kubernetes-the-hard-way/pull/741/commits/f4ec54ef75cc5ec3d6969dd28645720def2e44ed
 wget -q --show-progress --https-only --timestamping   -O cfssl https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64
 wget -q --show-progress --https-only --timestamping   -O cfssljson https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64
 chmod +x cfssl cfssljson
