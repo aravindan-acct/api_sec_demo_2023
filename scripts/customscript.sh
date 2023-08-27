@@ -17,11 +17,10 @@ sudo apt-get install apt-transport-https ca-certificates curl software-propertie
 sudo apt-get update
 sudo apt-get install -y python3-pip
 sudo pip3 install flask
-curl -o cfssl https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/darwin/cfssl
-curl -o cfssljson https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/darwin/cfssljson
+wget -q --show-progress --https-only --timestamping   -O cfssl https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64
+wget -q --show-progress --https-only --timestamping   -O cfssljson https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64
 chmod +x cfssl cfssljson
 sudo mv cfssl cfssljson /usr/local/bin/
-sudo apt-get -y net-tools
 sudo apt-get -y install nginx
 wget https://raw.githubusercontent.com/aravindan-acct/frontend_UI_app/waas/scripts/IMDS_Script_Customized.py
 python3 IMDS_Script_Customized.py
@@ -144,6 +143,7 @@ EOF
 }
 sudo cp nginxconfig.conf nginxconfig.conf.bak
 sudo mv nginxconfig.conf /etc/nginx/sites-enabled/default
+sudo apt-get -y net-tools
 git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
 cd frontend_UI_app
 nohup python3 starturl.py &
