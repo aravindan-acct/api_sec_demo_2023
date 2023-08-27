@@ -14,6 +14,7 @@
 
 sudo apt-get -y update
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get update
 sudo apt-get install -y python3-pip
 sudo pip3 install flask
 curl -o cfssl https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/darwin/cfssl
