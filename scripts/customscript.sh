@@ -14,12 +14,13 @@
 
 sudo apt-get -y update
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-wget -q --show-progress --https-only --timestamping \
-  https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
-  https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
-
+sudo apt-get install -y python3-pip
+sudo pip3 install flask
+curl -o cfssl https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/darwin/cfssl
+curl -o cfssljson https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/darwin/cfssljson
 chmod +x cfssl cfssljson
 sudo mv cfssl cfssljson /usr/local/bin/
+sudo apt-get -y net-tools
 sudo apt-get -y install nginx
 wget https://raw.githubusercontent.com/aravindan-acct/frontend_UI_app/waas/scripts/IMDS_Script_Customized.py
 python3 IMDS_Script_Customized.py
