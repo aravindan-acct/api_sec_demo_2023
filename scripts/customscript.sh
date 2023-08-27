@@ -134,8 +134,6 @@ server {
       # Fix the “It appears that your reverse proxy set up is broken" error.
       proxy_pass          http://localhost:7979;
       proxy_read_timeout  90;
-
-      proxy_redirect      http://localhost:7979 https://apifrontend.cudanet.local;
       
     }
   }
@@ -143,8 +141,11 @@ EOF
 }
 sudo cp nginxconfig.conf nginxconfig.conf.bak
 sudo mv nginxconfig.conf /etc/nginx/sites-enabled/default
-sudo apt-get -y net-tools
 git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
 cd frontend_UI_app
 nohup python3 starturl.py &
 echo "Script run completed"
+
+sudo systemctl enable nginx
+sudo systemctl stop nginx
+sudo systemctl start nginx
