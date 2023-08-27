@@ -224,7 +224,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "sh provisioning.sh"
+                    "commandToExecute": "sh customscript.sh"
                 }
             }
         }
