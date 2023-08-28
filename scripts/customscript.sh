@@ -136,7 +136,16 @@ server {
       # Fix the “It appears that your reverse proxy set up is broken" error.
       proxy_pass          http://localhost:7979;
       proxy_read_timeout  90;
-      
+    }
+    location /settings/ {
+      proxy_set_header        Host \$host;
+      proxy_set_header        X-Real-IP \$remote_addr;
+      proxy_set_header        X-Forwarded-For \$remote_addr;
+      proxy_set_header        X-Forwarded-Proto \$scheme;
+
+      # Fix the “It appears that your reverse proxy set up is broken" error.
+      proxy_pass          http://127.0.0.1:5000;
+      proxy_read_timeout  90; 
     }
   }
 EOF
@@ -147,6 +156,7 @@ git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
 sudo mkdir -p /etc/startup
 sudo cp -r frontend_UI_app /etc/startup/
 cd /etc/startup/frontend_UI_app/
+pip3 install -r requirements.txt
 sudo chmod +x /etc/startup/frontend_UI_app/starturl.py
 cat > startup.service << EOF
 [Unit]
