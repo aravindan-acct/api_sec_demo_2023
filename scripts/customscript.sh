@@ -147,6 +147,7 @@ git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
 cd frontend_UI_app
 sudo mkdir -p /etc/startup
 sudo cp starturl.py /etc/startup/
+sudo cp -f templates /etc/startup/
 sudo chmod +x /etc/startup/starturl.py
 cat > startup.service << EOF
 [Unit]
