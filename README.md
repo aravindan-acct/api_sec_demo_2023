@@ -21,12 +21,12 @@ To launch the template for the frontend UI Web Application from azure cli:
 
 `az deployment group create --name <name> --resource-group <rg-name> --template-file frontend_deploy.json`
 
-    - Listening port for the server is 443 - (The deployment uses an NGINX installation to proxy the traffic to the web app)
-    - To complete the initial setup:
-        - Access the url - 
+- Listening port for the server is 443 - (The deployment uses an NGINX installation to proxy the traffic to the web app)
+- To complete the initial setup:
+    - Access the url - 
 `https://<public-ip>/settings/starturl` , provide the inputs for the various fields and hit submit.
-        - Completing the initial setup is important to ensure that right parameters are set for the web application
-    - To access the application - 
+    - Completing the initial setup is important to ensure that right parameters are set for the web application
+- To access the application - 
     `https://<public-ip>/admin`
 
 #### General notes:
