@@ -31,6 +31,8 @@ To launch the template for the frontend UI Web Application from azure cli:
 
 #### General notes:
 1. The template uses some good defaults but can be overridden if needed to supply different values as parameter inputs.
+2. Deploy the backend_deploy.json first.
+
 
         
 
