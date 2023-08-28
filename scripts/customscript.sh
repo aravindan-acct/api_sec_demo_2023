@@ -144,19 +144,18 @@ EOF
 sudo cp nginxconfig.conf nginxconfig.conf.bak
 sudo mv nginxconfig.conf /etc/nginx/sites-enabled/default
 git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
-cd frontend_UI_app
 sudo mkdir -p /etc/startup
-sudo cp starturl.py /etc/startup/
-sudo cp -r templates /etc/startup/
-sudo chmod +x /etc/startup/starturl.py
+sudo cp -r frontend_UI_app /etc/startup/
+cd /etc/startup/frontend_UI_app/
+sudo chmod +x /etc/startup/frontend_UI_app/starturl.py
 cat > startup.service << EOF
 [Unit]
 Description=Frontend startup  web application
 After=network.target
 
 [Service]
-WorkingDirectory=/etc/startup
-ExecStart=python3 /etc/startup/starturl.py
+WorkingDirectory=/etc/startup/frontend_UI_app
+ExecStart=python3 /etc/startup/frontend_UI_app/starturl.py
 Restart=always
 
 [Install]
