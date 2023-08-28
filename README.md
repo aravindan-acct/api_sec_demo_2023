@@ -23,9 +23,11 @@ To launch the template for the frontend UI Web Application from azure cli:
 
     - Listening port for the server is 443 - (The deployment uses an NGINX installation to proxy the traffic to the web app)
     - To complete the initial setup:
-        - Access the url - `https://<public-ip>/settings/starturl` , provide the inputs for the various fields and hit submit.
+        - Access the url - 
+`https://<public-ip>/settings/starturl` , provide the inputs for the various fields and hit submit.
         - Completing the initial setup is important to ensure that right parameters are set for the web application
-    - To access the application - `https://<public-ip>/admin`
+    - To access the application - 
+    `https://<public-ip>/admin`
 
 #### General notes:
 1. The template uses some good defaults but can be overridden if needed to supply different values as parameter inputs.
