@@ -18,7 +18,7 @@
     "functions": [],
     "variables": {
         "vmname": "cudapetapi",
-        "storageacctname": "[toLower(concat(variables('vmname'),'storage'))]",
+        "storageacctname": "[toLower(concat(variables('vmname'),uniqueString(resourceGroup().id)))]",
         "publicip": "[concat(variables('vmname'),'-PublicIP')]",
         "vmnsg": "[concat(variables('vmname'), '-nsg')]",
         "vnet": "[concat(variables('vmname'),'-VirtualNetwork')]",
