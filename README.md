@@ -29,6 +29,11 @@ To launch the template for the frontend UI Web Application from azure cli:
     - Completing the initial setup is important to ensure that right parameters are set for the web application
 - To access the application - 
     `https://<public-ip>/admin`
+- Features:
+    - Admin portal
+    - New User Sign Up
+    - New User login and product page access
+    - E-commerce actions
 
 #### General notes:
 1. The template uses some good defaults but can be overridden if needed to supply different values as parameter inputs.
