@@ -1,6 +1,6 @@
-# Petstore API Server
+# Petstore Web Application
 
-API Security Demo Setup With Barracuda WAAS
+Deploy this application and demo API Security with Barracuda WAAS
 
 
 ### Deployment
@@ -17,6 +17,7 @@ To launch the template for the API server from azure cli:
     - Access the API documentation / swagger page by accessing: 
 `http://<ip>:8080/api/petstore/1.0.0/ui/#`
 
+#### Frontend UI Web Application
 To launch the template for the frontend UI Web Application from azure cli:
 
 `az deployment group create --name <name> --resource-group <rg-name> --template-file frontend_deploy.json`
