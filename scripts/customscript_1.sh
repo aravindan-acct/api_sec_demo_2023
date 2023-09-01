@@ -152,7 +152,7 @@ EOF
 }
 sudo cp nginxconfig.conf nginxconfig.conf.bak
 sudo mv nginxconfig.conf /etc/nginx/sites-enabled/default
-git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
+git clone -b waas_new https://github.com/aravindan-acct/frontend_UI_app.git
 sudo mkdir -p /etc/startup
 sudo cp -r frontend_UI_app /etc/startup/
 cd /etc/startup/frontend_UI_app/

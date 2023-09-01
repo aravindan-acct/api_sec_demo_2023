@@ -1,0 +1,239 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        
+        "vmpass": {
+            "type": "securestring",
+            "metadata": {
+            "description": "description"
+            },
+            "defaultValue": "P@$$w0rd@123"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/aravindan-acct/api_sec_demo_2023/main/scripts/customscript_1.sh"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "vmname": "appui",
+        "storageacctname": "[toLower(concat(variables('vmname'),uniqueString(resourceGroup().id)))]",
+        "publicip": "[concat(variables('vmname'),'-PublicIP')]",
+        "vmnsg": "[concat(variables('vmname'), '-nsg')]",
+        "vnet": "[concat(variables('vmname'),'-VirtualNetwork')]",
+        "subnet": "[concat(variables('vmname'), '-VirtualNetwork-Subnet')]",
+        "nic": "[concat(variables('vmname'),'-NetworkInterface')]",
+        "osdisk": "[concat(variables('vmname'),'-OSDisk')]",
+        "customscript": "[concat(variables('vmname'),'/customscript')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('storageacctname')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "Petstore Storage Account"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "Storage"
+        },
+        {
+            "name": "[variables('publicip')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "PublicIPAddress"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "dnsSettings": {
+                    "domainNameLabel": "[toLower(variables('vmname'))]"
+                }
+            }
+        },
+        {
+            "name": "[variables('vmnsg')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-11-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "nsgRule1",
+                        "properties": {
+                            "description": "description",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "nsgRule2",
+                        "properties": {
+                            "description": "description",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 101,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('vnet')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('vmnsg'))]"
+            ],
+            "tags": {
+                "displayName": "[variables('vnet')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('subnet')]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('vmnsg'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('nic')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-11-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicip'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet'))]"
+            ],
+            "tags": {
+                "displayName": "[variables('nic')]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicip'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet'), variables('subnet'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('vmname')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2021-03-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('nic'))]"
+            ],
+            "tags": {
+                "displayName": "[variables('vmname')]"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2s"
+                },
+                "osProfile": {
+                    "computerName": "[variables('vmname')]",
+                    "adminUsername": "azureuser",
+                    "adminPassword": "[parameters('vmpass')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts-gen2",
+                        "version": "20.04.202209200"
+                    },
+                    "osDisk": {
+                        "name": "[variables('osdisk')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                    
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower(variables('storageacctname')))).primaryEndpoints.blob]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "[variables('customscript')]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2021-03-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "Script for Petstore - This is tuned for Ubuntu 20.04 LTS"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('vmname'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.1",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[parameters('_artifactsLocation')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "sh customscript.sh"
+                }
+            }
+        }
+                
+    ],
+    "outputs": {
+        "VMPublicIP": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicip'))]"
+        }
+    }
+}
