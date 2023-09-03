@@ -171,7 +171,23 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
+cat > frontend.service << EOF
+[Unit]
+Description=Frontend web application
+After=network.target
+
+[Service]
+WorkingDirectory=/etc/startup/frontend_UI_app/
+ExecStart=python3 -m project
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 sudo mv startup.service /etc/systemd/system/
+sudo mv frontend.service /etc/systemd/system/
+
 sudo systemctl daemon-reload
 sudo systemctl start startup
 
