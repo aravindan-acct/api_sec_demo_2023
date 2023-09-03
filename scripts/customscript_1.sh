@@ -184,7 +184,7 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
-
+sudo chmod 666 /var/log/accesslogs.log
 sudo mv startup.service /etc/systemd/system/
 sudo mv frontend.service /etc/systemd/system/
 
