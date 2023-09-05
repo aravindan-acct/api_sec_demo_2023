@@ -11,7 +11,7 @@
 ###
 
 # Initial Setup
-
+sleep 30
 sudo apt -y update
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
 sudo apt update
