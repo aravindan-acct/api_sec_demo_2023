@@ -12,9 +12,9 @@
 
 # Initial Setup
 
-sudo apt-get -y update
+sudo apt -y update
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-sudo apt-get update
+sudo apt update
 sudo apt-get install -y python3-pip
 sudo pip3 install flask
 #Fix cfssl cfssljson related issue with the following fix:
