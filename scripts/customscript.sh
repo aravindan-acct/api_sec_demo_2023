@@ -11,19 +11,19 @@
 ###
 
 # Initial Setup
-
-sudo apt-get -y update
-sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-sudo apt-get update
-sudo apt-get install -y python3-pip
-sudo pip3 install flask
+sleep 30
+apt -y update
+apt-get install apt-transport-https ca-certificates curl software-properties-common
+apt update
+apt-get install -y python3-pip
+pip3 install flask
 #Fix cfssl cfssljson related issue with the following fix:
 #https://github.com/kelseyhightower/kubernetes-the-hard-way/pull/741/commits/f4ec54ef75cc5ec3d6969dd28645720def2e44ed
 wget -q --show-progress --https-only --timestamping   -O cfssl https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64
 wget -q --show-progress --https-only --timestamping   -O cfssljson https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64
 chmod +x cfssl cfssljson
-sudo mv cfssl cfssljson /usr/local/bin/
-sudo apt-get -y install nginx
+mv cfssl cfssljson /usr/local/bin/
+apt-get -y install nginx
 wget https://raw.githubusercontent.com/aravindan-acct/frontend_UI_app/waas/scripts/IMDS_Script_Customized.py
 python3 IMDS_Script_Customized.py
 echo "Public IP set for the JS code to work"
@@ -106,8 +106,8 @@ cfssl gencert \
 
 }
 echo "moving the certificates"
-sudo cp apifrontend-key.pem /etc/nginx/cert.key
-sudo cp apifrontend.pem /etc/nginx/cert.crt 
+cp apifrontend-key.pem /etc/nginx/cert.key
+cp apifrontend.pem /etc/nginx/cert.crt 
 # NGINX Configuration
 {
 cat > nginxconfig.conf << EOF
@@ -150,14 +150,14 @@ server {
   }
 EOF
 }
-sudo cp nginxconfig.conf nginxconfig.conf.bak
-sudo mv nginxconfig.conf /etc/nginx/sites-enabled/default
-git clone -b waas https://github.com/aravindan-acct/frontend_UI_app.git
-sudo mkdir -p /etc/startup
-sudo cp -r frontend_UI_app /etc/startup/
+cp nginxconfig.conf nginxconfig.conf.bak
+mv nginxconfig.conf /etc/nginx/sites-enabled/default
+git clone -b waas_new https://github.com/aravindan-acct/frontend_UI_app.git
+mkdir -p /etc/startup
+cp -r frontend_UI_app /etc/startup/
 cd /etc/startup/frontend_UI_app/
 pip3 install -r requirements.txt
-sudo chmod +x /etc/startup/frontend_UI_app/starturl.py
+chmod +x /etc/startup/frontend_UI_app/starturl.py
 cat > startup.service << EOF
 [Unit]
 Description=Frontend startup  web application
@@ -171,12 +171,27 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
-sudo mv startup.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl start startup
+cat > frontend.service << EOF
+[Unit]
+Description=Frontend web application
+After=network.target
+
+[Service]
+WorkingDirectory=/etc/startup/frontend_UI_app/
+ExecStart=python3 -m project
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+mv startup.service /etc/systemd/system/
+mv frontend.service /etc/systemd/system/
+
+systemctl daemon-reload
+systemctl start startup
 
 echo "Script run completed"
 
-sudo systemctl enable nginx
-sudo systemctl stop nginx
-sudo systemctl start nginx
+systemctl enable nginx
+systemctl stop nginx
+systemctl start nginx
